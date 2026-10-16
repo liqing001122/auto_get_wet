@@ -16,13 +16,13 @@ jobs:
     steps:
       # 拉取仓库代码
       - name: 拉取代码
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       # 安装Python环境
       - name: 安装Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.11"
           cache: "pip"
 
       # 安装依赖
