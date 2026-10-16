@@ -1,0 +1,36 @@
+name: 定时爬虫微信推送
+
+# 触发条件
+on:
+  schedule:
+    # cron表达式：分 时 日 月 周，注意GitHub默认是UTC时区，比北京时间晚8小时
+    # 例：'0 0 * * *' 表示UTC时间0点 = 北京时间8点
+    - cron: '0 0 * * *'
+  # 允许手动点击触发，方便测试
+  workflow_dispatch:
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # 最多跑10分钟，防止卡死浪费额度
+    steps:
+      # 拉取仓库代码
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      # 安装Python环境
+      - name: 安装Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      # 安装依赖
+      - name: 安装依赖
+        run: pip install -r requirements.txt
+
+      # 运行爬虫脚本，自动传入密钥
+      - name: 运行爬虫
+        env:
+          SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
+        run: python crawler.py
