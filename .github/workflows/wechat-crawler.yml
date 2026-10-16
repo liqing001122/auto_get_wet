@@ -5,7 +5,7 @@ on:
   schedule:
     # cron表达式：分 时 日 月 周，注意GitHub默认是UTC时区，比北京时间晚8小时
     # 例：'0 0 * * *' 表示UTC时间0点 = 北京时间8点
-    - cron: '0 0 * * *'
+    - cron: '0 4 * * *'
   # 允许手动点击触发，方便测试
   workflow_dispatch:
 
