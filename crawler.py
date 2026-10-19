@@ -17,9 +17,17 @@ def fetch_content():
     now = datetime.now(BJT).strftime("%Y-%m-%d %H:%M:%S")
     
     # 示例2：调用免费天气接口（你可以换成自己想爬的网站）
-    weather_resp = requests.get("https://www.tianqiapi.com/free/day?appid=23035354&appsecret=8YvlPNrz&city=北京", timeout=10)
-    weather = weather_resp.json()
-    weather_text = f"🌤️ 北京今日天气：{weather['wea']}，温度{weather['tem']}℃，{weather['win']}{weather['win_speed']}"
+    # 请求接口，获取广州天气纯文本结果
+    weather_resp = requests.get("https://wttr.in/Guangzhou?format=%C+%t+%h+%w&lang=zh", timeout=10)
+    # 去除首尾多余的空白字符
+    raw_weather = weather_resp.text.strip()
+    # 按空格拆分出四个天气字段，对应：天气状况、温度、湿度、风速风向
+    wea, tem, humidity, wind_info = raw_weather.split()
+    # 拆分风向和风速：移除风速前面的方向箭头，分离出风向、风速数值
+    win, win_speed = wind_info.strip('↖↗↘↙').split('km/h')
+    
+    # 最终拼接成规范的天气展示文本
+    weather_text = f"🌤️ 广州今日天气：{wea}，温度{tem}，湿度{humidity}，{win} {win_speed}km/h"
     
     # 示例3：获取每日一句
     say_resp = requests.get("https://v1.hitokoto.cn/?c=i&c=k", timeout=10)
